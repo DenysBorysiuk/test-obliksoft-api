@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
-import { getAllNotes, saveNote, deleteNote, updateNote } from '../services/db';
+import { getAllNotes, saveNote, deleteNote, updateNote } from '../services/api';
 import Sidebar from './Sidebar/Sidebar';
 import Workspace from './Workspace/Workspace';
 import SearchBox from './SearchBox/SearchBox';
@@ -27,10 +27,14 @@ export const App = () => {
   }, []);
 
   const handleAddNote = async () => {
-    const newNote = { id: nanoid(), text: '', lastModified: Date.now() };
-    await saveNote(newNote);
-    setNotes(prevState => [newNote, ...prevState]);
-    setActiveNote(newNote.id);
+    const date = new Date();
+    const newNote = {
+      id: nanoid(),
+      values: { text: '', lastModified: date.toLocaleDateString() },
+    };
+    const addedNote = await saveNote(newNote);
+    setNotes(prevState => [addedNote, ...prevState]);
+    setActiveNote(addedNote.id);
   };
 
   const handleDeleteNote = async id => {
@@ -56,7 +60,7 @@ export const App = () => {
   const getVisibleNotes = () => {
     const normalizedFilter = searchTerm.toLowerCase();
 
-    return notes.filter(note => note.text.toLowerCase().includes(normalizedFilter));
+    return notes.filter(note => note.values.text.toLowerCase().includes(normalizedFilter));
   };
 
   return (

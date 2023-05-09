@@ -1,15 +1,16 @@
 import { useNotes } from '../App';
-import { Wrap, Time, Text } from './Workspace.styled';
+import { Wrap, Time } from './Workspace.styled';
+import { DebounceInput } from 'react-debounce-input';
 
 const Workspace = () => {
   const { getActiveNote, handleUpdateNote } = useNotes();
   const activeNote = getActiveNote();
 
   const onChange = (field, value) => {
+    const date = new Date();
     handleUpdateNote({
       ...activeNote,
-      [field]: value,
-      lastModified: Date.now(),
+      values: { [field]: value, lastModified: date.toLocaleDateString() },
     });
   };
 
@@ -25,12 +26,14 @@ const Workspace = () => {
   return (
     activeNote && (
       <Wrap>
-        <Time>{new Date(activeNote.lastModified).toLocaleDateString('en-GB', options)}</Time>
-        <Text
+        <Time>{new Date().toLocaleDateString('en-GB', options)}</Time>
+        <DebounceInput
+          element="textarea"
+          debounceTimeout={300}
           type="text"
           id="text"
           placeholder="Write your note here..."
-          value={activeNote.text}
+          value={activeNote.values.text}
           onChange={e => onChange('text', e.target.value)}
           autoFocus
         />

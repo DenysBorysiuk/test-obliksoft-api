@@ -7,20 +7,20 @@ export const Wrap = styled.div`
   border-radius: 5px;
   padding: 20px;
   overflow: hidden;
+
+  > textarea {
+    display: block;
+    width: 100%;
+    height: calc(100vh - 170px);
+    font-size: 16px;
+    resize: none;
+    background-color: transparent;
+    border: none;
+    outline: none;
+  }
 `;
 
 export const Time = styled.p`
   text-align: center;
   margin-bottom: 20px;
-`;
-
-export const Text = styled.textarea`
-  display: block;
-  width: 100%;
-  height: calc(100vh - 170px);
-  font-size: 16px;
-  resize: none;
-  background-color: transparent;
-  border: none;
-  outline: none;
 `;
