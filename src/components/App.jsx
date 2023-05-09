@@ -30,7 +30,7 @@ export const App = () => {
     const date = new Date();
     const newNote = {
       id: nanoid(),
-      values: { text: '', lastModified: date.toLocaleDateString() },
+      values: { text: 'Untitled note', lastModified: date.toLocaleDateString() },
     };
     const addedNote = await saveNote(newNote);
     setNotes(prevState => [addedNote, ...prevState]);

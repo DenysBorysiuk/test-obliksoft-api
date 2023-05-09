@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://quintadb.com/apps/aDrGjiW5PijPOvWOWIkmok';
-const API_KEY = 'ddM0hdLbrdSOxcKLWGW7iP';
-const ENTITY_ID = 'dcO1ldGZ9nW7RdQcpdQmoO';
+axios.defaults.baseURL = 'https://quintadb.com/apps/cOkCkZBmjjFiormt0kaCkB';
+const API_KEY = 'cfW4PlCmjig4yeACkRsSkg';
+const ENTITY_ID = 'dcVYdcM8jgWPzjnJNdOguN';
 
 export const getAllNotes = async () => {
   try {
     const response = await axios.get(
-      `dtypes/entity/dcO1ldGZ9nW7RdQcpdQmoO.json?rest_api_key=${API_KEY}&amp;view=`,
+      `dtypes/entity/${ENTITY_ID}.json?rest_api_key=${API_KEY}&amp;view=`,
       {
         params: {
           name_value: 1,
@@ -23,19 +23,19 @@ export const getAllNotes = async () => {
 
 export const saveNote = async note => {
   try {
-    const response = await axios.post('/dtypes.json', {
+    const response = await axios.post(`/dtypes.json?rest_api_key=${API_KEY}`, {
       values: {
         entity_id: ENTITY_ID,
-        rest_api_key: API_KEY,
+        // rest_api_key: API_KEY,
         id: note.id,
-        cTzZhcN8jkp4oZbSoNq8o1: note.values.text,
-        ddTuOyWPHhW7ldRCobW7yT: note.values.lastModified,
+        a5W5zYWRDcV6r9W5lcJYLC: note.values.text,
+        dcOGW1tNXdQQT2ysiZj8oK: note.values.lastModified,
       },
     });
 
     const {
       id,
-      values: { cTzZhcN8jkp4oZbSoNq8o1: text, ddTuOyWPHhW7ldRCobW7yT: lastModified },
+      values: { a5W5zYWRDcV6r9W5lcJYLC: text, dcOGW1tNXdQQT2ysiZj8oK: lastModified },
     } = response.data.record;
     return { id, values: { text, lastModified } };
   } catch (error) {
