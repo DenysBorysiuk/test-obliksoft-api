@@ -27,11 +27,12 @@ export const App = () => {
   }, []);
 
   const handleAddNote = async () => {
-    const date = new Date();
+    // const date = new Date();
     const newNote = {
       id: nanoid(),
-      values: { text: 'Untitled note', lastModified: date.toLocaleDateString() },
+      values: { text: 'Untitled note', lastModified: Date.now() },
     };
+
     const addedNote = await saveNote(newNote);
     setNotes(prevState => [addedNote, ...prevState]);
     setActiveNote(addedNote.id);

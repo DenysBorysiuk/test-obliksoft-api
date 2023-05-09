@@ -7,10 +7,13 @@ const Workspace = () => {
   const activeNote = getActiveNote();
 
   const onChange = (field, value) => {
-    const date = new Date();
+    console.log(value);
+    if (!value) {
+      value = 'Untitled note';
+    }
     handleUpdateNote({
       ...activeNote,
-      values: { [field]: value, lastModified: date.toLocaleDateString() },
+      values: { [field]: value, lastModified: Date.now() },
     });
   };
 
@@ -29,7 +32,7 @@ const Workspace = () => {
         <Time>{new Date().toLocaleDateString('en-GB', options)}</Time>
         <DebounceInput
           element="textarea"
-          debounceTimeout={300}
+          debounceTimeout={5000}
           type="text"
           id="text"
           placeholder="Write your note here..."

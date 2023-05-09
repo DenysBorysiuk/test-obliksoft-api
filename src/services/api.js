@@ -62,8 +62,8 @@ export const updateNote = async updatedNote => {
     await axios.put(`/dtypes/${updatedNote.id}.json`, {
       rest_api_key: API_KEY,
       values: {
-        cTzZhcN8jkp4oZbSoNq8o1: updatedNote.values.text,
-        ddTuOyWPHhW7ldRCobW7yT: updatedNote.values.lastModified,
+        a5W5zYWRDcV6r9W5lcJYLC: updatedNote.values.text,
+        dcOGW1tNXdQQT2ysiZj8oK: updatedNote.values.lastModified,
       },
     });
   } catch (error) {
