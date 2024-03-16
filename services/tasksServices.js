@@ -3,10 +3,13 @@ import path from 'path';
 import { nanoid } from 'nanoid';
 
 const tasksPath = path.resolve('db', 'tasks.json');
+const updateTasks = async contacts => {
+  return fs.writeFile(tasksPath, JSON.stringify(contacts, null, 2), 'utf8');
+};
 
 export const listTasks = async () => {
-  const data = await fs.readFile(tasksPath, 'utf-8');
-  return JSON.parse(data);
+  const result = await fs.readFile(tasksPath, 'utf-8');
+  return JSON.parse(result);
 };
 
 export const getTaskById = async id => {
@@ -18,19 +21,46 @@ export const getTaskById = async id => {
 
 export const removeTask = async id => {
   const tasks = await listTasks();
-  const idx = tasks.findIndex(contact => contact.id === id);
+  const idx = tasks.findIndex(task => task.id === id);
 
   if (idx === -1) {
     return null;
   }
 
-  const [removedContact] = contacts.splice(idx, 1);
+  const [removedTask] = tasks.splice(idx, 1);
 
-  await updateContacts(contacts);
+  await updateTasks(tasks);
 
-  return removedContact;
+  return removedTask;
 };
 
-export const addTask = async text => {
-  // ...твій код. Повертає об'єкт доданого контакту (з id).
+export const addTask = async body => {
+  const tasks = await listTasks();
+  console.log(body);
+  const newTask = {
+    id: nanoid(),
+    ...body,
+    complete: false,
+  };
+
+  tasks.push(newTask);
+
+  await updateTasks(tasks);
+
+  return newTask;
+};
+
+export const updateTask = async (id, body) => {
+  const tasks = await listTasks();
+  const idx = tasks.findIndex(task => task.id === String(id));
+
+  if (idx === -1) {
+    return null;
+  }
+
+  tasks[idx] = { ...tasks[idx], ...body };
+
+  await updateTasks(tasks);
+
+  return tasks[idx];
 };

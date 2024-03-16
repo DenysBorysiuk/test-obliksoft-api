@@ -4,8 +4,10 @@ import {
   getOneTask,
   deleteTask,
   createTask,
-  updateTask,
+  updateTaskById,
 } from '../controllers/tasks.js';
+import validateBody from '../helpers/validateBody.js';
+import { createTaskSchema, updateTaskSchema } from '../schemas/tasksSchemas.js';
 
 const tasksRouter = express.Router();
 
@@ -15,8 +17,8 @@ tasksRouter.get('/:id', getOneTask);
 
 tasksRouter.delete('/:id', deleteTask);
 
-tasksRouter.post('/', createTask);
+tasksRouter.post('/', validateBody(createTaskSchema), createTask);
 
-tasksRouter.put('/:id', updateTask);
+tasksRouter.put('/:id', validateBody(updateTaskSchema), updateTaskById);
 
 export default tasksRouter;

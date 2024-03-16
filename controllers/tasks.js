@@ -1,24 +1,76 @@
-import { listTasks, getTaskById, addTask, removeTask } from '../services/tasksServices.js';
+import {
+  listTasks,
+  getTaskById,
+  addTask,
+  removeTask,
+  updateTask,
+} from '../services/tasksServices.js';
+
+import HttpError from '../helpers/HttpError.js';
 
 export const getAllTasks = async (req, res) => {
-  const result = await listTasks();
-
-  return res.status(200).json(result);
-};
-
-export const getOneTask = async (req, res) => {
-  const { id } = req.params;
-  const result = await getTaskById(id);
-
-  if (!result) {
-    return res.status(404).json({ message: 'Not found' });
+  try {
+    const result = await listTasks();
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
   }
-
-  res.status(200).json(result);
 };
 
-export const deleteTask = async (req, res) => {};
+export const getOneTask = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await getTaskById(id);
 
-export const createTask = async (req, res) => {};
+    if (!result) {
+      throw HttpError(404);
+    }
 
-export const updateTask = async (req, res) => {};
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteTask = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await removeTask(id);
+
+    if (!result) {
+      throw HttpError(404);
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createTask = async (req, res, next) => {
+  try {
+    const result = await addTask(req.body);
+
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateTaskById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await updateTask(id, req.body);
+
+    if (!result) {
+      throw HttpError(404);
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
