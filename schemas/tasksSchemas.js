@@ -2,7 +2,6 @@ import Joi from 'joi';
 
 export const createTaskSchema = Joi.object({
   text: Joi.string().required(),
-  completed: Joi.boolean().required(),
 });
 
 export const updateTaskSchema = Joi.object({

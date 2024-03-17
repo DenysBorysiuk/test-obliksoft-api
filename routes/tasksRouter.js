@@ -1,13 +1,7 @@
 import express from 'express';
 
-import {
-  getAllTasks,
-  getOneTask,
-  deleteTask,
-  createTask,
-  updateTaskById,
-  updateStatusTask,
-} from '../controllers/tasks.js';
+import tasksCtrl from '../controllers/tasks.js';
+
 import validateBody from '../helpers/validateBody.js';
 import {
   createTaskSchema,
@@ -17,16 +11,20 @@ import {
 
 const tasksRouter = express.Router();
 
-tasksRouter.get('/', getAllTasks);
+tasksRouter.get('/', tasksCtrl.getAllTasks);
 
-tasksRouter.get('/:id', getOneTask);
+tasksRouter.get('/:id', tasksCtrl.getOneTask);
 
-tasksRouter.delete('/:id', deleteTask);
+tasksRouter.post('/', validateBody(createTaskSchema), tasksCtrl.createTask);
 
-tasksRouter.post('/', validateBody(createTaskSchema), createTask);
+tasksRouter.delete('/:id', tasksCtrl.deleteTask);
 
-tasksRouter.put('/:id', validateBody(updateTaskSchema), updateTaskById);
+tasksRouter.put('/:id', validateBody(updateTaskSchema), tasksCtrl.updateTask);
 
-tasksRouter.patch('/:id/favorite', validateBody(updateCompletedSchema), updateStatusTask);
+tasksRouter.patch(
+  '/:id/completed',
+  validateBody(updateCompletedSchema),
+  tasksCtrl.updateStatusTask
+);
 
 export default tasksRouter;
