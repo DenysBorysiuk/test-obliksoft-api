@@ -1,16 +1,10 @@
-import {
-  listTasks,
-  getTaskById,
-  addTask,
-  removeTask,
-  updateTask,
-} from '../services/tasksServices.js';
+import { Task } from '../models/task.js';
 
 import HttpError from '../helpers/HttpError.js';
 
-export const getAllTasks = async (req, res) => {
+export const getAllTasks = async (req, res, next) => {
   try {
-    const result = await listTasks();
+    const result = await Task.find({}, '-createdAt -updatedAt');
     if (!result) {
       throw HttpError(404);
     }
@@ -23,7 +17,7 @@ export const getAllTasks = async (req, res) => {
 export const getOneTask = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await getTaskById(id);
+    const result = await Task.findById(id);
 
     if (!result) {
       throw HttpError(404);
@@ -38,7 +32,7 @@ export const getOneTask = async (req, res, next) => {
 export const deleteTask = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await removeTask(id);
+    const result = await Task.findByIdAndDelete(id);
 
     if (!result) {
       throw HttpError(404);
@@ -52,7 +46,7 @@ export const deleteTask = async (req, res, next) => {
 
 export const createTask = async (req, res, next) => {
   try {
-    const result = await addTask(req.body);
+    const result = await Task.create(req.body);
 
     res.status(201).json(result);
   } catch (error) {
@@ -63,7 +57,22 @@ export const createTask = async (req, res, next) => {
 export const updateTaskById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await updateTask(id, req.body);
+    const result = await Task.findByIdAndUpdate(String(id), req.body);
+
+    if (!result) {
+      throw HttpError(404);
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateStatusTask = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await Task.findByIdAndUpdate(id, req.body);
 
     if (!result) {
       throw HttpError(404);
