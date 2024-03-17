@@ -5,7 +5,8 @@ import HttpError from '../helpers/HttpError.js';
 import ctrlWrapper from '../helpers/ctrlWrapper.js';
 
 const getAllTasks = async (req, res) => {
-  const result = await Task.find();
+  const { _id: owner } = req.user;
+  const result = await Task.find({ owner }).populate('owner', 'name email');
 
   if (!result) {
     throw HttpError(404);
@@ -14,9 +15,10 @@ const getAllTasks = async (req, res) => {
   return res.status(200).json(result);
 };
 
-const getOneTask = async (req, res, next) => {
+const getOneTask = async (req, res) => {
+  const { _id: owner } = req.user;
   const { id } = req.params;
-  const result = await Task.findById(id);
+  const result = await Task.findById({ owner, _id: id });
 
   if (!result) {
     throw HttpError(404);
@@ -26,7 +28,8 @@ const getOneTask = async (req, res, next) => {
 };
 
 const createTask = async (req, res) => {
-  const result = await Task.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Task.create({ ...req.body, owner });
 
   return res.status(201).json(result);
 };
