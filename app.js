@@ -3,7 +3,9 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 import { dbConnect } from './server.js';
-import tasksRouter from './routes/tasksRouter.js';
+
+import authRouter from './routes/api/auth.js';
+import tasksRouter from './routes/api/tasks.js';
 
 export const app = express();
 
@@ -11,6 +13,7 @@ app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
 
+app.use('/api/users', authRouter);
 app.use('/api/tasks', tasksRouter);
 
 app.use((_, res) => {
